@@ -2,6 +2,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
 
 df = pd.read_csv('Crop_recommendation.csv')
 
@@ -21,6 +24,24 @@ print(f"Accuracy: {accuracy * 100:.2f}%\n")
 
 print("Classification Report:")
 print(classification_report(y_test, y_pred))
+
+cm = confusion_matrix(y_test, y_pred)
+
+plt.figure(figsize=(14, 10))
+
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+            xticklabels=rf_model.classes_,
+            yticklabels=rf_model.classes_)
+
+plt.title('Confusion Matrix - Random Forest Crop Prediction', fontsize=16)
+plt.xlabel('Predicted Crop', fontsize=12)
+plt.ylabel('Actual Crop', fontsize=12)
+
+plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
+
+plt.savefig('confusion_matrix.png')
+plt.show()
 
 new_data = pd.read_csv('new_soil_data.csv')
 
